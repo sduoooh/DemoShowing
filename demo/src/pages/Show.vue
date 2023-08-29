@@ -5,7 +5,7 @@ const router = useRouter()
 </script>
 
 <template>
-    <iframe :src="`/demo_list/${router.currentRoute.value.params.demoName}/index.html`">
+    <iframe style="width: 100vw;min-height: 100vh;" :src="`../../public/demo_list/${router.currentRoute.value.params.demoName}/dist/index.html`">
     </iframe>
 </template>
 
