@@ -39,8 +39,8 @@ export const router = createRouter({
     routes,
 })
 
-router.beforeEach((to, from) => {
-    const demoExisted = computed(() => demoList.every((i)=>i.name === to.params.demoName[0]) )
+router.beforeEach((to) => {
+    const demoExisted = computed(() => demoList.value.every((i)=>i.name === to.params.demoName[0]) )
     if (to.name === 'show' && !demoExisted.value ) {
         router.push('/list')
     }

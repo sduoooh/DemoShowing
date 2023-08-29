@@ -1,11 +1,9 @@
 <script setup>
-import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import Helper from './components/Helper.vue'
 
 const router = useRouter()
-
 </script>
 
 <template>

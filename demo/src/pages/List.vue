@@ -1,12 +1,10 @@
 <script setup>
 import { ref } from 'vue'
 import axios from 'axios'
-import { useWindowSize } from "@vueuse/core"
 
 import DemoCard from '../components/DemoCard.vue'
 
 const input = ref('')
-const { height } = useWindowSize()
 
 const cardList = ref([])
 axios.get(
@@ -58,7 +56,7 @@ const checkWheel = (event) => {
 }
 
 const enter = () => {
-    !findMode.value ? (() => { change() ; setTimeout(change, 1750) })() : change()
+    !findMode.value ? (() => { change() ; setTimeout(change, 1750) })() : (()=>{if(!isTemp.value) {change()}})()
 }
 
 const inputEvent = () => {

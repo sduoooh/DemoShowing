@@ -22,9 +22,16 @@ const props = defineProps({
     }
 })
 
-onClickOutside(target, (event) => mainCard.value.className = 'start')
+onClickOutside(
+    target, 
+    (event) => {
+        mainCard.value.className = 'start'
+        console.log(event)
+    }, 
+)
 
 const skip = ()=> {
+    console.log(props.url)
     window.open(props.url)
 
 }
@@ -51,10 +58,10 @@ const date = useDateFormat(props.lastedUpdate, '最后更新于 YYYY-MM-DD')
                     </div>
                 </div>
             </div>
-            <div style="width: 10rem;background-color: rgb(6, 117, 65);"></div>
+            <div style="width: 10rem;background-color: rgb(6, 117, 65);z-index: 2;"></div>
         </div>
         <div
-            style="width: 10rem;position: relative;border: 2px solid rgb(242,242,242);border-left-width: 0;border-radius: 0.5rem;right: 5rem;display: flex;flex-direction: row;justify-content: center;z-index: -1;">
+            style="width: 10rem;position: relative;border: 2px solid rgb(242,242,242);border-left-width: 0;border-radius: 0.5rem;right: 5rem;display: flex;flex-direction: row;justify-content: center;">
             <div style="display: flex;flex-direction: column;justify-content: center;">
                 <div style="display: flex;flex-direction: column;">
                     <div class="button" @click="skip"><span style="line-height: 2.5rem;margin: 0.25rem 0.25rem ;">{{ "查看源码" }}</span>
