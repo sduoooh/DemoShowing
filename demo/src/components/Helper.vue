@@ -33,7 +33,7 @@ const changeStatus = (isOpen) => {
 
 <template>
     <div ref="help" style="position: fixed;caret-color: transparent;" @contextmenu.prevent @click.right="changeStatus(1)" :class="helperClassName" :style="style">
-        <img v-if="helperClassName === 'overview'" src="/logo.jpg" style="width: 4rem;"/>
+        <img v-if="helperClassName === 'overview'" src="/logo.png" style="width: 4rem;"/>
         <div v-else style="display: flex;flex-direction: column;">
             <div class="rowCenter border helperUnit">
                 <div class="columnMargin">{{ " 返回列表 " }}</div>
