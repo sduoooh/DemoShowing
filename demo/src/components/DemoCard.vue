@@ -2,6 +2,7 @@
 import { ref } from "vue"
 import { useRouter } from "vue-router"
 import { useDateFormat, onClickOutside } from "@vueuse/core"
+import { helperInfor } from "../share/data"
 
 const target = ref(null)
 const mainCard = ref(null)
@@ -17,33 +18,29 @@ const props = defineProps({
     lastedUpdate: {
         type: String,
     },
-    url : {
+    url: {
         type: String,
     }
 })
 
 onClickOutside(
-    target, 
+    target,
     (event) => {
         mainCard.value.className = 'start'
-        console.log(event)
-    }, 
+    },
 )
 
-const skip = ()=> {
-    console.log(props.url)
+const skip = () => {
     window.open(props.url)
-
 }
 const date = useDateFormat(props.lastedUpdate, '最后更新于 YYYY-MM-DD')
 </script>
 
 <template>
     <div style="display: flex;flex-direction: row;margin-bottom: 5rem;" ref="target">
-        <div style="transition: 1.5s;display: flex;flex-direction: row;position: relative;flex: auto;max-height:40vh;border: 2px solid rgb(242,242,242);border-radius: 0.5rem;"  class="start" @click="mainCard.className = mainCard.className === 'start' ? 'temp' : 'start'"
-                ref="mainCard">
-            <div
-                style="display: flex;flex-direction: column;">
+        <div style="transition: 1.5s;display: flex;flex-direction: row;position: relative;flex: auto;max-height:40vh;border: 2px solid rgb(242,242,242);border-radius: 0.5rem;"
+            class="start" @click="mainCard.className = mainCard.className === 'start' ? 'temp' : 'start'" ref="mainCard">
+            <div style="display: flex;flex-direction: column;">
                 <div style="margin: 3rem 5rem;width: calc(35vw);display: flex;flex-direction: column;">
                     <div style="display: flex;flex-direction: row;margin-bottom: 3rem;">
                         <div style="flex:auto">
@@ -64,10 +61,16 @@ const date = useDateFormat(props.lastedUpdate, '最后更新于 YYYY-MM-DD')
             style="width: 10rem;position: relative;border: 2px solid rgb(242,242,242);border-left-width: 0;border-radius: 0.5rem;right: 5rem;display: flex;flex-direction: row;justify-content: center;">
             <div style="display: flex;flex-direction: column;justify-content: center;">
                 <div style="display: flex;flex-direction: column;">
-                    <div class="button" @click="skip"><span style="line-height: 2.5rem;margin: 0.25rem 0.25rem ;">{{ "查看源码" }}</span>
+                    <div class="button" @click="skip"><span style="line-height: 2.5rem;margin: 0.25rem 0.25rem ;">{{ "查看源码"
+                    }}</span>
                     </div>
-                    <div class="button" @click="router.push(`/demo/${props.name}`)"><span style="line-height: 2.5rem;margin: 0.25rem 0.25rem;">{{ "试试样例" }}</span></div>
-                </div>  
+                    <div class="button" @click="() => {
+                            helperInfor.srcUrl = props.url
+                            helperInfor.beforeUrl = router.currentRoute.value.href
+                            router.push(`/demo/${props.name}`)
+                        }
+                        "><span style="line-height: 2.5rem;margin: 0.25rem 0.25rem;">{{ "试试样例" }}</span></div>
+                </div>
             </div>
         </div>
     </div>
@@ -90,4 +93,5 @@ const date = useDateFormat(props.lastedUpdate, '最后更新于 YYYY-MM-DD')
     display: flex;
     flex-direction: row;
     justify-content: center;
-}</style>
+}
+</style>

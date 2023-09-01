@@ -1,7 +1,10 @@
 <script setup>
 import { ref } from 'vue'
 import { useDraggable, useMouseInElement, useWindowSize } from '@vueuse/core'
+import { useRouter } from 'vue-router'
+import { helperInfor } from '../share/data'
 
+const router = useRouter()
 const help = ref(null)
 const helperClassName = ref('overview')
 const LAST = ref([0,0])
@@ -29,20 +32,24 @@ const changeStatus = (isOpen) => {
     isOpen ? [x.value, y.value] = [LAST.value[0] + x.value, LAST.value[1] + y.value] : [x.value, y.value] = [x.value - LAST.value[0],  y.value - LAST.value[1]]
     helperClassName.value = ['overview', 'main'][isOpen]
 }
+
+const skip = (url)=> {
+    window.open(url)
+}
 </script>
 
 <template>
     <div ref="help" style="position: fixed;caret-color: transparent;" @contextmenu.prevent @click.right="changeStatus(1)" :class="helperClassName" :style="style">
         <img v-if="helperClassName === 'overview'" src="/logo.png" style="width: 4rem;"/>
         <div v-else style="display: flex;flex-direction: column;">
-            <div class="rowCenter border helperUnit">
+            <div class="rowCenter border helperUnit" @click.left.prevent="skip(helperInfor.beforeUrl)">
                 <div class="columnMargin">{{ " 返回列表 " }}</div>
             </div>
-            <div class="rowCenter border bottomBorder helperUnit">
-                <div class="columnMargin" >{{ " 查看源码 " }}</div>
+            <div class="rowCenter border bottomBorder helperUnit" @click.left.prevent="skip(helperInfor.srcUrl)">
+                <div class="columnMargin">{{ " 查看源码 " }}</div>
             </div>
             <div class="rowCenter border bottomBorder helperUnit" @click.left.prevent="changeStatus(0)">
-                <div class="columnMargin" >{{ " 取"}}<span style="visibility: hidden;">{{ "占位" }}</span>{{ "消 " }}</div>
+                <div class="columnMargin">{{ " 取"}}<span style="visibility: hidden;">{{ "占位" }}</span>{{ "消 " }}</div>
             </div>
         </div>
     </div>

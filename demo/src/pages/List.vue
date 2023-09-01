@@ -1,16 +1,29 @@
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref, watchEffect } from 'vue'
+import { useRouter } from 'vue-router'
+import Fuse from 'fuse.js'
 import axios from 'axios'
 
 import DemoCard from '../components/DemoCard.vue'
 
+const router = useRouter()
 const input = ref('')
-
+const fuse = ref(null)
+const result = ref([])
 const cardList = ref([])
 axios.get(
     '/demo_list/demoList.json'
 ).then((i)=>{
     cardList.value = i.data
+    fuse.value = new Fuse(
+        cardList.value,
+        {
+            keys: ['name', 'information'],
+            findAllMatches: true,
+            useExtendedSearch: true,
+            
+        }
+    )
 })
 
 const finderContainer = ref(null)
@@ -60,13 +73,21 @@ const enter = () => {
 }
 
 const inputEvent = () => {
+    console.log(isTemp.value)
+    if (isTemp.value) {
+        finder.value.innerHTML = input.value
+        initArr()
+        return
+    }
     if (finder.value.innerHTML.length >= 18) {
         finder.value.innerHTML = input.value
         initArr()
         return
     }
+    
     input.value = finder.value.innerHTML
-    if (input.value.length >= 5) {
+    router.push({query: {find: input.value}})
+    if (input.value.length >= 5 && !findMode.value) {
         enter()
     }
 }
@@ -75,6 +96,25 @@ const initArr = () => {
     document.execCommand("selectAll", false, null)
     document.getSelection().collapseToEnd()
 }
+
+onMounted(() => {
+    input.value = router.currentRoute.value.query.find || ''
+    finder.value.innerHTML = input.value
+    initArr()
+    inputEvent()
+})
+
+watchEffect(() => {
+    if (input.value.trim() !== '') {
+        let temp = []
+        fuse.value.search('\'' + input.value.trim()).forEach((i) => {
+            temp.push(i.item)
+        })
+        result.value = temp
+    }else {
+        result.value = cardList.value
+    }
+})
 </script>
 
 <template>
@@ -96,7 +136,7 @@ const initArr = () => {
         </div>
         <div style="flex: auto;display: flex;flex-direction: row;justify-content: center;margin-top: 20vh;" v-if="findMode" ref="cards">
             <div style="display: flex;flex-direction: column;">
-            <DemoCard v-for="i in cardList" :name="i.name" :information="i.information" :lasted-update="i.lastedUpdate" :url="i.url" />
+            <DemoCard v-for="i in result" :name="i.name" :information="i.information" :lasted-update="i.lastedUpdate" :url="i.url" />
             </div>
         </div>
     </div>
