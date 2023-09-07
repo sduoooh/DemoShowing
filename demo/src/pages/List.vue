@@ -21,7 +21,6 @@ axios.get(
             keys: ['name', 'information'],
             findAllMatches: true,
             useExtendedSearch: true,
-            
         }
     )
 })
@@ -136,7 +135,7 @@ watchEffect(() => {
         </div>
         <div style="flex: auto;display: flex;flex-direction: row;justify-content: center;margin-top: 20vh;" v-if="findMode" ref="cards">
             <div style="display: flex;flex-direction: column;">
-            <DemoCard v-for="i in result" :name="i.name" :information="i.information" :lasted-update="i.lastedUpdate" :url="i.url" />
+            <DemoCard v-for="i in result" :name="i.name" :information="i.information" :lasted-update="i.lastedUpdate" :url="i.srcUrl" />
             </div>
         </div>
     </div>

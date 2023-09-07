@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import { useDraggable, useMouseInElement, useWindowSize } from '@vueuse/core'
 import { useRouter } from 'vue-router'
-import { helperInfor } from '../share/data'
+import { helperInfor, isHelperDaggable } from '../share/data'
 
 const router = useRouter()
 const help = ref(null)
@@ -12,8 +12,10 @@ const { width, height } = useWindowSize()
 const { x, y, style } = useDraggable(help, {
   initialValue: { x: 10, y: 10 },
   preventDefault: true,
+
   onStart: () => {
     if (helperClassName.value !== 'overview') return false
+    isHelperDaggable.value = true
   },
   onMove: (position) => {
     if ((position.x <= 10 || position.x >= width.value - 64)){
@@ -23,8 +25,11 @@ const { x, y, style } = useDraggable(help, {
         y.value = position.y <= 10 ? 10 : height.value - 64
     }
   },
-
+  onEnd: () => {
+    isHelperDaggable.value = false
+  },
 })
+
 const { elementX, elementY } = useMouseInElement(help)
 
 const changeStatus = (isOpen) => {
