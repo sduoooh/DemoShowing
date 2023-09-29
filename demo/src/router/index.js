@@ -1,11 +1,11 @@
-import { computed,ref } from 'vue'
+import { computed, ref } from 'vue'
 import axios from 'axios'
 import { createRouter, createWebHashHistory } from 'vue-router'
 
 const demoList = ref([])
 axios.get(
     '/demo_list/demoList.json'
-).then((i)=>{
+).then((i) => {
     demoList.value = i.data
 })
 
@@ -16,7 +16,7 @@ const routes = [
     {
         path: '/',
         redirect: '/list',
-        name : 'list',
+        name: 'list',
     },
     {
         path: '/list',
@@ -40,8 +40,17 @@ export const router = createRouter({
 })
 
 router.beforeEach((to) => {
-    const demoExisted = computed(() => demoList.value.every((i)=>i.name === to.params.demoName[0]) )
-    if (to.name === 'show' && !demoExisted.value ) {
+    const demoExisted = computed(
+        () => {
+            demoList.value.forEach(
+                (value) => {
+                    if (value.name === to.params?.demoName?.[0]) return true
+                }
+            )
+            return false
+        }
+    )
+    if (to.name === 'show' && !demoExisted) {
         router.push('/list')
     }
 })
